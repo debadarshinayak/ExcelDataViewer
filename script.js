@@ -321,100 +321,81 @@
             document.getElementById('clearFilterButton').onclick = clearFilters;
         }
 
+        
+
         function addFilterRow(filterFields) {
-            const filterRow = document.createElement('div');
-            filterRow.className = 'filter-row';
+    const filterRow = document.createElement('div');
+    filterRow.className = 'filter-row';
 
-            // Column Select Dropdown
-            const columnSelect = document.createElement('select');
-            headers.forEach((header, index) => {
-                if (index > 0) { // Skip first column (actions)
-                    const option = document.createElement('option');
-                    option.value = index;
-                    option.textContent = header;
-                    columnSelect.appendChild(option);
-                }
-            });
-
-            // Condition Select Dropdown
-            const conditionSelect = document.createElement('select');
-            const conditions = [
-                'Contains', 
-                'Equals', 
-                'Starts With', 
-                'Ends With', 
-                'Greater Than', 
-                'Less Than'
-            ];
-            conditions.forEach(condition => {
-                const option = document.createElement('option');
-                option.value = condition;
-                option.textContent = condition;
-                conditionSelect.appendChild(option);
-            });
-
-            // Value Input
-            const valueInput = document.createElement('input');
-            valueInput.type = 'text';
-            valueInput.placeholder = 'Filter Value';
-
-            // Remove Filter Button
-            const removeButton = document.createElement('button');
-            removeButton.textContent = '✖';
-            removeButton.className = 'button delete-button';
-            removeButton.onclick = () => filterFields.removeChild(filterRow);
-
-            filterRow.appendChild(columnSelect);
-            filterRow.appendChild(conditionSelect);
-            filterRow.appendChild(valueInput);
-            filterRow.appendChild(removeButton);
-
-            filterFields.appendChild(filterRow);
+    // Column Select Dropdown
+    const columnSelect = document.createElement('select');
+    columnSelect.className = 'column-select';
+    headers.forEach((header, index) => {
+        if (index > 0) { // Skip first column (actions)
+            const option = document.createElement('option');
+            option.value = index;
+            option.textContent = header;
+            columnSelect.appendChild(option);
         }
+    });
 
-        function compareDates(date1Str, date2Str, condition) {
-    // Parse DD/MM/YYYY format
-    const parseDate = (dateStr) => {
-        const [day, month, year] = dateStr.split('/').map(Number);
-        return new Date(year, month - 1, day);
-    };
+    // Value Dropdown (will be populated when column is selected)
+    const valueSelect = document.createElement('select');
+    valueSelect.className = 'value-select';
 
-    try {
-        const date1 = parseDate(date1Str);
-        const date2 = parseDate(date2Str);
+    // Add change event listener to column select
+    columnSelect.addEventListener('change', () => {
+        updateValueDropdown(columnSelect, valueSelect);
+    });
 
-        switch(condition) {
-            case 'Greater Than':
-                return date1 > date2;
-            case 'Less Than':
-                return date1 < date2;
-            default:
-                return false;
-        }
-    } catch (error) {
-        console.error('Invalid date format', error);
-        return false;
-    }
+    // Remove Filter Button
+    const removeButton = document.createElement('button');
+    removeButton.textContent = '✖';
+    removeButton.className = 'button delete-button';
+    removeButton.onclick = () => filterFields.removeChild(filterRow);
+
+    filterRow.appendChild(columnSelect);
+    filterRow.appendChild(valueSelect);
+    filterRow.appendChild(removeButton);
+
+    filterFields.appendChild(filterRow);
+    
+    // Initialize value dropdown for the first column
+    updateValueDropdown(columnSelect, valueSelect);
 }
 
-// Modify the applyFilters function to use compareDates for date columns
-function parseComparableValue(value) {
-    // Remove commas for numeric parsing
-    const numericValue = parseFloat(value.replace(/,/g, ''));
-    
-    // Check if it's a date in DD/MM/YYYY format
-    const datePattern = /^(\d{2})\/(\d{2})\/(\d{4})$/;
-    const dateMatch = value.match(datePattern);
-    
-    if (dateMatch) {
-        // Convert to Date object for comparison
-        const [, day, month, year] = dateMatch;
-        return new Date(year, month - 1, day);
+function updateValueDropdown(columnSelect, valueSelect) {
+    const columnIndex = parseInt(columnSelect.value);
+    const uniqueValues = new Set();
+
+    // Get all values from the selected column (skip header row)
+    for (let i = 1; i < originalData.length; i++) {
+        const value = originalData[i][columnIndex];
+        if (value !== undefined && value !== null && value !== '') {
+            uniqueValues.add(value);
+        }
     }
-    
-    // Return numeric value if it's a valid number
-    return isNaN(numericValue) ? value.toLowerCase() : numericValue;
+
+    // Clear existing options
+    valueSelect.innerHTML = '';
+
+    // Add a default "Select value" option
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.textContent = 'Select value';
+    valueSelect.appendChild(defaultOption);
+
+    // Add unique values as options
+    Array.from(uniqueValues)
+        .sort((a, b) => a.toString().localeCompare(b.toString()))
+        .forEach(value => {
+            const option = document.createElement('option');
+            option.value = value;
+            option.textContent = value;
+            valueSelect.appendChild(option);
+        });
 }
+
 
 function applyFilters() {
     const filterFields = document.getElementById('filterFields');
@@ -423,40 +404,15 @@ function applyFilters() {
     let result = originalData.slice(1); // Skip headers
 
     for (let row of filterRows) {
-        const columnIndex = parseInt(row.getElementsByTagName('select')[0].value);
-        const condition = row.getElementsByTagName('select')[1].value;
-        const filterValue = row.getElementsByTagName('input')[0].value;
+        const columnIndex = parseInt(row.querySelector('.column-select').value);
+        const filterValue = row.querySelector('.value-select').value;
 
-        result = result.filter(dataRow => {
-            const cellValue = dataRow[columnIndex] || '';
-            
-            switch(condition) {
-                case 'Contains':
-                    return cellValue.toLowerCase().includes(filterValue.toLowerCase());
-                case 'Equals':
-                    return cellValue.toLowerCase() === filterValue.toLowerCase();
-                case 'Starts With':
-                    return cellValue.toLowerCase().startsWith(filterValue.toLowerCase());
-                case 'Ends With':
-                    return cellValue.toLowerCase().endsWith(filterValue.toLowerCase());
-                case 'Greater Than':
-                case 'Less Than':
-                    const parsedCellValue = parseComparableValue(cellValue);
-                    const parsedFilterValue = parseComparableValue(filterValue);
-                    
-                    // Only compare if both values are comparable (same type)
-                    if (typeof parsedCellValue === typeof parsedFilterValue) {
-                        if (condition === 'Greater Than') {
-                            return parsedCellValue > parsedFilterValue;
-                        } else {
-                            return parsedCellValue < parsedFilterValue;
-                        }
-                    }
-                    return false;
-                default:
-                    return true;
-            }
-        });
+        if (filterValue) { // Only apply filter if a value is selected
+            result = result.filter(dataRow => {
+                const cellValue = dataRow[columnIndex] || '';
+                return cellValue === filterValue;
+            });
+        }
     }
 
     // Combine headers with filtered results
