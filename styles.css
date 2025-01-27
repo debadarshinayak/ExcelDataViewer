@@ -3,16 +3,6 @@ body {
     margin: 20px;
     padding: 20px;
 }
-
-.filter-row select {
-    padding: 5px;
-    margin-right: 10px;
-    min-width: 150px;
-}
-
-.value-select {
-    min-width: 200px !important;
-}
 .controls {
     margin-bottom: 20px;
     text-align: center;
