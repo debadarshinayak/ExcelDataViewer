@@ -1,0 +1,174 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    padding: 20px;
+}
+.controls {
+    margin-bottom: 20px;
+    text-align: center;
+}
+.button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+.add-column-section {
+    background-color: #f8f8f8;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 4px;
+}
+.add-column-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.controls {
+    margin-bottom: 20px;
+}
+.edit-button {
+    background-color: #2196F3;
+}
+.delete-button {
+    background-color: #f44336;
+}
+.save-button {
+    background-color: #4CAF50;
+}
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 20px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+.empty-cell {
+    color: #999;
+    font-style: italic;
+}
+.home-container {
+    text-align: center;
+    margin-top: 50px;
+}
+#admin-content, #guest-content {
+    display: none;
+}
+
+.add-column-section {
+    background-color: #f8f8f8;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 4px;
+}
+.add-column-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    padding: 20px;
+}
+.controls {
+    margin-bottom: 20px;
+}
+.button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+.edit-button {
+    background-color: #2196F3;
+}
+.delete-button {
+    background-color: #f44336;
+}
+.save-button {
+    background-color: #4CAF50;
+}
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 20px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+.edit-mode input {
+    width: 90%;
+    padding: 5px;
+}
+#addForm {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f8f8f8;
+    border-radius: 4px;
+}
+#addForm input {
+    margin: 5px;
+    padding: 5px;
+}
+.actions-cell {
+    white-space: nowrap;
+    width: 1%;
+    padding: 8px !important;
+}
+.empty-cell {
+    color: #999;
+    font-style: italic;
+}
+
+.filter-section {
+    background-color: #f8f8f8;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+.filter-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.filter-row select, .filter-row input {
+    margin-right: 10px;
+    padding: 5px;
+}
+#filterButton, #clearFilterButton {
+    margin-right: 10px;
+}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- <title>Google Sheets Data1</title> -->
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+    <div id="home-container" class="home-container">
+        <h1>FHTC & HGJ</h1>
+        <button id="adminBtn" class="button">Admin Access</button>
+        <button id="guestBtn" class="button">View as Guest</button>
+    </div>
+
+    <div id="guest-content">
+        <button id="guestBackBtn" class="button">Back to Home</button>
+        <h1>Guest View</h1>
+        <table id="guestSheetData"></table>
+    </div>
+
+    <div id="admin-content">
+        <!-- Full admin content from the original HTML -->
+        <button id="adminBackBtn" class="button">Back to Home</button>
+        <h1>Admin Data Manager</h1>
+        <div class="controls">
+            <button id="authorize_button" class="button" style="display: none;">Authorize</button>
+            <button id="signout_button" class="button" style="display: none;">Sign Out</button>
+        </div>
+
+        <div id="filter-container" class="filter-section" style="display: none;">
+            <h3>Filter Data</h3>
+            <div id="filterFields"></div>
+            <div class="filter-row">
+                <button id="addFilterButton" class="button">Add Filter</button>
+                <button id="filterButton" class="button">Apply Filters</button>
+                <button id="clearFilterButton" class="button">Clear Filters</button>
+            </div>
+        </div>
+
+        <div id="content">
+            <table id="sheetData"></table>
+        </div>
+
+        <div id="add-column-container" class="add-column-section" style="display: none;">
+            <h3>Add New Column</h3>
+            <div class="add-column-row">
+                <input type="text" id="newColumnName" placeholder="Column Name">
+                <input type="text" id="newColumnDefaultValue" placeholder="Default Value (Optional)">
+                <button onclick="addNewColumn()" class="button save-button">Add Column</button>
+            </div>
+        </div>
+
+        <div id="addForm" style="display: none;">
+            <h3>Add New Row</h3>
+            <div id="addFormFields"></div>
+            <button onclick="addNewRow()" class="button save-button">Add Row</button>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+    <script async defer src="https://apis.google.com/js/api.js" onload="loadGapiClient()"></script>
+    <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+</body>
+</html>
